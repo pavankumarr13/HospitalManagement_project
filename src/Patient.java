@@ -48,7 +48,7 @@ public class Patient {
     public String toString() {
         
 
-        return String.format("  %-2d  %-12s  %-10d  %-14s %n",id, name, contact, conditionsStrings[condition]);
+        return String.format(" %-2d  %-15s  %-12d  %-15s %n",id, name, contact, conditionsStrings[condition-1]);
     }
         
 

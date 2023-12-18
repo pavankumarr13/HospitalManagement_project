@@ -14,6 +14,12 @@ public class Main {
                 case 1: hi.regPatient();
                     break;
                 case 2:
+                    break ;
+
+                case 3:hi.displayPatient();
+                    break ;
+                
+                case 4: hi.displayDoctors();
             
                 default:
                     break;
