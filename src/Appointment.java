@@ -4,14 +4,24 @@ public class Appointment {
     private String appdate ;
     private String appTime;
     private String meridiem;
+    private String dname;
+    private String pname;
+    private double amt;
+    Appointment(){}//Default values
+    
 
-    Appointment(int appId, int patientId, String appdate, String appTime, String meridiem) {
+    Appointment(int appId, int patientId, String appdate, String appTime, String meridiem,String dname,String pname,double amt) {
         this.appId = appId;
         this.patientId = patientId;
         this.appdate = appdate;
         this.appTime = appTime;
         this.meridiem=meridiem;
+        this.dname = dname;
+        this.amt = amt;
+        this.pname = pname;
     }
+
+
 
     public int getAppId() {
         return appId;
@@ -51,6 +61,25 @@ public class Appointment {
 
     public void setMeridiem(String meridiem) {
         this.meridiem = meridiem;
+    }
+
+
+    public String getDname() {
+        return dname;
+    }
+
+
+    public String getPname() {
+        return pname;
+    }
+
+
+    public double getAmt() {
+        return amt;
+    }
+    @Override
+    public String toString() {
+        return String.format(" %-2s  %-15s  %-15s  %-12s %-6s %n", appId,dname,pname,appdate,appTime);
     }
 
     

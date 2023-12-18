@@ -16,9 +16,15 @@ class PatientAlreadyExistsException extends RuntimeException{
     }
 }
 
-class AppointmentException extends RuntimeException{
+class AppointmentPatientIDException extends RuntimeException{
     @Override
     public String getMessage() {
         return "Patient/Doctor not found , kindly register before booking appointment...!";
+    }
+}
+class AppointmentIDException extends RuntimeException{
+    @Override
+    public String getMessage() {
+        return "Appointment ID is not available ";
     }
 }

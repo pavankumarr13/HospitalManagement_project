@@ -4,10 +4,11 @@ import java.util.Scanner;
 
 public class Hospital implements Hospital_interf {
     Scanner sc=new Scanner(System.in);
-    int patientcount=1;
+    int patientcount=0;
   
     List<Patient> patient=new ArrayList<>();
     List<Doctor> doctor = new ArrayList<>();
+    List<Appointment> appointment = new ArrayList<>();
     Hospital(){
         doctor.add(new Doctor("John",1,"Cardiologist"));
         doctor.add(new Doctor("Vishwash",2,"Dermatologist"));
@@ -16,6 +17,7 @@ public class Hospital implements Hospital_interf {
         doctor.add(new Doctor("Suchin",5,"Neurologist"));
         doctor.add(new Doctor("Shilpa",6,"Dietition"));
         doctor.add(new Doctor("Sdidarth",7,"Physiothearapist"));
+       
     }
 
     
@@ -88,16 +90,17 @@ public class Hospital implements Hospital_interf {
                 Patient p=new Patient(name,id,c,condition);
 
                 patient.add(p);
+                patientcount++;
 
                 System.out.println("Patient registered successfully");
                 
-           }else{
-            throw new InvalidCondition();
-           }
-         }catch(InvalidCondition e){
-            System.out.println(e.getMessage());
+              }else{
+                 throw new InvalidCondition();
+                }
+             }catch(InvalidCondition e){
+                 System.out.println(e.getMessage());
+             }
         }
-    }
     
     
 
@@ -122,26 +125,57 @@ public class Hospital implements Hospital_interf {
     
     @Override
     public void scheduleAppointment() {
+        if(patientcount> 0){
+            String pname=null;
+            String dname=null;
+            double amount=0;
+            System.out.println("Enter the Appointment Id ");
+            int appId=sc.nextInt();
+
+            try{
+             for(Appointment a:appointment){
+                 if(appId==a.getAppId()){
+                    throw new AppointmentIDException();
+                }
+             }
+               }catch(AppointmentIDException e){
+                     System.out.println(e.getMessage());
+                    return;
+              }
+
+
         System.out.println("Enter the Patient Id :");
         int pid=sc.nextInt();
 
         try{
-            for(Patient p :patient){
-                if(pid==p.getId()){
-                    throw new AppointmentException();
+            for(int i=0;i<=patientcount;i++){
+                Patient p=patient.get(i);
+                if(pid!=p.getId()){
+                    throw new AppointmentPatientIDException();
+                }else {
+                   pname=p.getPname();
+                   dname=p.getDname();
+                   amount=p.getAmount();
+                   break;
                 }
             }
-        }catch(AppointmentException e){
+        }catch(AppointmentPatientIDException e){
             System.out.println(e.getMessage());
+            return;
+            
         }
 
+        sc.nextLine();
+        System.out.println();
         System.out.println("Enter the date of appointment required : (DD:MM:YYYY) ");
         String date=sc.nextLine();
+        
 
         System.out.println("Enter the time of   appointment required : (00:00) ");
         String time=sc.nextLine();
+        
 
-        String meridien;
+        String meridien="null";
 
         while(true){
             System.out.println("Please select the choice \n1.\tAM\n2.\tPM");
@@ -160,16 +194,58 @@ public class Hospital implements Hospital_interf {
                 break;
             }
         }
-        
-        
+
+        System.out.println("Appointment scheduled successfully...");
+
+        Appointment a=new Appointment(appId,pid,date,time,meridien,dname,pname,amount);
+
+        appointment.add(a);
+ 
+        }else {
+            System.out.println("You need to register atleast once before booking appointment.");
+        }
     }
 
     @Override
-    public void displayAppointment(Appointment a) {
+    public void displayAppointment() {
+        System.out.printf(" %-2s  %-15s  %-15s  %-12s %-6s %n", "Id","Doctor Name","Patient Name","Date","Time");
+        for(Appointment a: appointment){
+            System.out.println(a);
+        }
     }
 
     @Override
     public void generateBill() {
+        System.out.println("Enter Your Appointment ID");
+        int id=sc.nextInt();
+        int amt=0,dcharge=500;
+        for(Appointment a: appointment){
+            if(id==a.getAppId()){
+                amt+=a.getAmt();
+                double cost=amt+dcharge;
+                double GST=0.18*cost;
+                System.out.println();
+                System.out.println("================================================");
+                System.out.println("Bill Generated Successfully");
+                System.out.println("\nService charge is :\tRs. "+amt+"\n");
+                System.out.println("Doctor charge is  : \tRs. "+dcharge);
+                System.out.println("\nTotal Amount is   :\tRs. "+cost+"\n");
+                System.out.println("IGST 18%          :\tRs. "+GST+"\n");
+                System.out.println("Final Amount is   :\tRs. "+(cost+GST)+"\n");
+                System.out.println("=================== Thank You ==================");
+                break;
+    
+            }
+        }
+        if(amt==0) {
+            System.out.println("Patient/Doctor Not Found.....!");
+        }
+
     }
+    // @Override
+    // public boolean checkBoolean(){
+    //     boolean b=patient.isEmpty();
+    //     return b;
+    // }
     
 }

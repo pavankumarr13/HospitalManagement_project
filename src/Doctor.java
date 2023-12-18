@@ -15,7 +15,8 @@ public class Doctor {
    
    
     public String getName(int i) {
-        return name;
+        this.did=i;
+        return this.name;
     }
     public void setName(String name) {
         this.name = name;
